@@ -15,6 +15,7 @@ let computerGuess = Math.round(Math.random()*10)
 if(computerGuess === answers.userGuess){
     console.log(chalk.blueBright("Congratulation! You Won The Game"))
 }
+
 else{
     console.log(chalk.redBright(`The number was ${computerGuess}, You lost! Better Luck Next Time`))
 }
