@@ -22,6 +22,10 @@ class Bank {
     addAccountNumber(obj) {
         this.accounts.push(obj);
     }
+    transaction(accObj) {
+        let NewAccounts = this.accounts.filter(acc => acc.accNumber !== accObj.accNumber);
+        this.accounts = [...NewAccounts, accObj];
+    }
 }
 let jazilBank = new Bank();
 for (let i = 1; i <= 3; i++) {
@@ -76,11 +80,44 @@ async function bankService(bank) {
             let response2 = await inquirer.prompt([
                 {
                     type: "input",
-                    message: `Please Enter Your Amount`,
+                    message: `Please Enter Your Amount To Withdraw`,
                     name: "amount"
                 }
             ]);
-            let newBalance = account.balance - response2.amount;
+            if (response2.amount > account.balance) {
+                console.log(chalk.red(`Your Current Balance is insufficient to withdraw`));
+            }
+            else {
+                let newBalance = account.balance - response2.amount;
+                bank.transaction({ accNumber: account.accNumber, balance: newBalance });
+                console.log(chalk.yellow(`Your Remaining Balance is`, `$${newBalance}`));
+            }
+        }
+    }
+    // Cash Deposit
+    if (answer.service === "Cash Deposit") {
+        let response = await inquirer.prompt([
+            {
+                name: "accnum",
+                type: "input",
+                message: "Please Enter Your Account Number: "
+            }
+        ]);
+        let account = jazilBank.accounts.find((acc) => acc.accNumber == response.accnum);
+        if (!account) {
+            console.log(chalk.redBright.italic("Invalid Account Number"));
+        }
+        else if (account) {
+            let response3 = await inquirer.prompt([
+                {
+                    type: "input",
+                    message: `Please Enter Your Amount To Deposit: `,
+                    name: "amount"
+                }
+            ]);
+            let newBalance = account.balance + response3.amount;
+            bank.transaction({ accNumber: account.accNumber, balance: newBalance });
+            console.log(chalk.yellow(`Your New Balance is`, `$${newBalance}`));
         }
     }
 }
