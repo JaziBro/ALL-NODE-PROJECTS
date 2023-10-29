@@ -1,5 +1,4 @@
 #! usr/bin/env Node
-
 import inquirer from "inquirer";
 let todos = [];
 let loop = true;
@@ -8,14 +7,14 @@ while (loop) {
         {
             name: "todo",
             type: "string",
-            message: "Enter What To Do"
+            message: "Enter What Task You Want To Do"
         },
         {
             name: "addmore",
             type: "confirm",
             message: "do you want to add more tasks? ",
             default: false
-        }
+        },
     ]);
     const { todo, addmore } = answers;
     loop = addmore;
